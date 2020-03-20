@@ -155,6 +155,7 @@ and so on."
   (interactive)
   (vlc--get "/requests/status.json" :command 'pl_stop))
 
+;;;###autoload
 (defun vlc-play (id)
   "Play playlist item ID. If ID is omitted, play last active item:"
   (interactive (list (unless current-prefix-arg
