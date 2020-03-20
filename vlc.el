@@ -27,9 +27,10 @@
 
 ;;; Code:
 
-(require 'json)
+(require 'auth-source)
 (require 'cl-lib)
 (require 'dom)
+(require 'json)
 (require 'subr-x)
 
 (defvar url-http-end-of-headers)
