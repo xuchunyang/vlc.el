@@ -343,5 +343,99 @@ where and how these files are written, such as –snapshot-path."
   (interactive)
   (vlc--get "/requests/status.json" :command 'snapshot))
 
+;;; Keys
+
+(defconst vlc--keys '(toggle-fullscreen
+                      play-pause
+                      pause
+                      play
+                      faster
+                      slower
+                      next
+                      prev
+                      stop
+                      position
+                      jump-extrashort
+                      jump+extrashort
+                      jump-short
+                      jump+short
+                      jump-medium
+                      jump+medium
+                      jump-long
+                      jump+long
+                      nav-activate
+                      nav-up
+                      nav-down
+                      nav-left
+                      nav-right
+                      disc-menu
+                      title-prev
+                      title-next
+                      chapter-prev
+                      chapter-next
+                      quit
+                      vol-up
+                      vol-down
+                      vol-mute
+                      subdelay-up
+                      subdelay-down
+                      audiodelay-up
+                      audiodelay-down
+                      audio-track
+                      subtitle-track
+                      aspect-ratio
+                      crop
+                      deinterlace
+                      intf-show
+                      intf-hide
+                      snapshot
+                      history-back
+                      history-forward
+                      record
+                      dump
+                      crop-top
+                      uncrop-top
+                      crop-left
+                      uncrop-left
+                      crop-bottom
+                      uncrop-bottom
+                      crop-right
+                      uncrop-right
+                      set-bookmark1
+                      set-bookmark2
+                      set-bookmark3
+                      set-bookmark4
+                      set-bookmark5
+                      set-bookmark6
+                      set-bookmark7
+                      set-bookmark8
+                      set-bookmark9
+                      set-bookmark10
+                      play-bookmark1
+                      play-bookmark2
+                      play-bookmark3
+                      play-bookmark4
+                      play-bookmark5
+                      play-bookmark6
+                      play-bookmark7
+                      play-bookmark8
+                      play-bookmark9
+                      play-bookmark10)
+  "List of vlc keys.
+Extract from URL
+`https://docs.racket-lang.org/vlc/#%28part._.Keys%29', which is
+extracted from URL
+`https://wiki.videolan.org/VLC_HowTo/Use_with_lirc/'")
+
+(defun vlc-key (key)
+  "Send a key command KEY to VLC.
+KEY must be on of `vlc--keys'."
+  (interactive (list (pcase (completing-read "Send a key to VLC: "
+                                             vlc--keys nil t)
+                       ("" nil)
+                       (s (intern s)))))
+  (cl-assert (memq key vlc--keys))
+  (vlc--get "/requests/status.json" :command 'key :val key))
+
 (provide 'vlc)
 ;;; vlc.el ends here
