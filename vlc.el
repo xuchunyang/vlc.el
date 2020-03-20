@@ -30,6 +30,7 @@
 (require 'json)
 (require 'cl-lib)
 (require 'dom)
+(require 'subr-x)
 
 (defvar url-http-end-of-headers)
 (defvar url-http-response-status)
@@ -53,9 +54,22 @@ option --http-port=PORT."
 (defcustom vlc-password "secret"
   "Password you set for the HTTP web interface.
 See URL `https://wiki.videolan.org/Documentation:Modules/http_intf/#Access_control'."
-  :type 'string)
+  :type '(choice (string :tag "Password")
+                 (const :tag "Use auth-source" 'auth-source)))
 
 (define-error 'vlc-error "VLC Error" 'error)
+
+(defun vlc--password ()
+  (pcase vlc-password
+    ((pred stringp) vlc-password)
+    ('auth-source (setq vlc-password (vlc--auth-source-search "vlc")))
+    (_ (user-error "Please set a password"))))
+
+(defun vlc--auth-source-search (host)
+  "Return password for HOST in auth-source."
+  (when-let ((plist (car (auth-source-search :host host :max 1)))
+             (pass (funcall (plist-get plist :secret))))
+    pass))
 
 (defun vlc--url-encode-params (params)
   "URL encode PARAMS which must be a plist."
@@ -93,7 +107,7 @@ PARAMS is a plist."
                `(("Pragma" . "no-cache")
                  ("Authorization" .
                   ,(concat "Basic "
-                           (base64-encode-string (concat ":" vlc-password))))))
+                           (base64-encode-string (concat ":" (vlc--password)))))))
               (url-show-status nil))
           (url-retrieve-synchronously url))
       (pcase url-http-response-status
