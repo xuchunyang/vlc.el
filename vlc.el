@@ -362,11 +362,15 @@ where and how these files are written, such as –snapshot-path."
 ;;; Keys
 
 (defconst vlc--keys '(toggle-fullscreen
+                      leave-fullscreen
                       play-pause
                       pause
                       play
                       faster
                       slower
+                      rate-normal
+                      rate-faster-fine
+                      rate-slower-fine
                       next
                       prev
                       stop
@@ -379,6 +383,7 @@ where and how these files are written, such as –snapshot-path."
                       jump+medium
                       jump-long
                       jump+long
+                      frame-next
                       nav-activate
                       nav-up
                       nav-down
@@ -395,20 +400,36 @@ where and how these files are written, such as –snapshot-path."
                       vol-mute
                       subdelay-up
                       subdelay-down
+                      subsync-markaudio
+                      subsync-marksub
+                      subsync-apply
+                      subsync-reset
+                      subpos-up
+                      subpos-down
                       audiodelay-up
                       audiodelay-down
                       audio-track
+                      audiodevice-cycle
+                      subtitle-revtrack
                       subtitle-track
+                      subtitle-toggle
+                      program-sid-next
+                      program-sid-prev
                       aspect-ratio
                       crop
+                      toggle-autoscale
+                      incr-scalefactor
+                      decr-scalefactor
                       deinterlace
+                      deinterlace-mode
                       intf-show
-                      intf-hide
+                      intf-boss
+                      intf-popup-menu
                       snapshot
-                      history-back
-                      history-forward
                       record
-                      dump
+                      zoom
+                      unzoom
+                      wallpaper
                       crop-top
                       uncrop-top
                       crop-left
@@ -417,6 +438,16 @@ where and how these files are written, such as –snapshot-path."
                       uncrop-bottom
                       crop-right
                       uncrop-right
+                      random
+                      loop
+                      viewpoint-fov-in
+                      viewpoint-fov-out
+                      viewpoint-roll-clock
+                      viewpoint-roll-anticlock
+                      zoom-quarter
+                      zoom-half
+                      zoom-original
+                      zoom-double
                       set-bookmark1
                       set-bookmark2
                       set-bookmark3
@@ -436,7 +467,11 @@ where and how these files are written, such as –snapshot-path."
                       play-bookmark7
                       play-bookmark8
                       play-bookmark9
-                      play-bookmark10)
+                      play-bookmark10
+                      clear-playlist
+                      subtitle-text-scale-normal
+                      subtitle-text-scale-up
+                      subtitle-text-scale-down)
   "List of vlc keys.
 Extract from URL
 `https://docs.racket-lang.org/vlc/#%28part._.Keys%29', which is
