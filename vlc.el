@@ -56,7 +56,7 @@ option --http-port=PORT."
   "Password you set for the HTTP web interface.
 See URL `https://wiki.videolan.org/Documentation:Modules/http_intf/#Access_control'."
   :type '(choice (string :tag "Password")
-                 (const :tag "Use auth-source" 'auth-source)))
+                 (const :tag "Use auth-source" auth-source)))
 
 (define-error 'vlc-error "VLC Error" 'error)
 
