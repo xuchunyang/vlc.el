@@ -66,7 +66,7 @@ See URL `https://wiki.videolan.org/Documentation:Modules/http_intf/#Access_contr
     ((pred stringp) vlc-password)
     ('auth-source
      (pcase (vlc--auth-source-search "vlc")
-       ('nil (user-error "Can't find your VLC passwrod in auth-source"))
+       ('nil (user-error "Can't find your VLC password in auth-source"))
        (pass (setq vlc-password pass))))
     (_ (user-error "Please set a password"))))
 
