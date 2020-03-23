@@ -64,7 +64,10 @@ See URL `https://wiki.videolan.org/Documentation:Modules/http_intf/#Access_contr
   "Return the HTTP web interface password."
   (pcase vlc-password
     ((pred stringp) vlc-password)
-    ('auth-source (setq vlc-password (vlc--auth-source-search "vlc")))
+    ('auth-source
+     (pcase (vlc--auth-source-search "vlc")
+       ('nil (user-error "Can't find your VLC passwrod in auth-source"))
+       (pass (setq vlc-password pass))))
     (_ (user-error "Please set a password"))))
 
 (defun vlc--auth-source-search (host)
