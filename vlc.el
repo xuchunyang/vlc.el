@@ -61,6 +61,7 @@ See URL `https://wiki.videolan.org/Documentation:Modules/http_intf/#Access_contr
 (define-error 'vlc-error "VLC Error" 'error)
 
 (defun vlc--password ()
+  "Return the HTTP web interface password."
   (pcase vlc-password
     ((pred stringp) vlc-password)
     ('auth-source (setq vlc-password (vlc--auth-source-search "vlc")))
@@ -144,7 +145,8 @@ and so on."
     (vlc--uniquify (format "%s<%d>" name 2) existing-names))))
 
 (defun vlc--playlist-completing-read (prompt)
-  "Pick one item from playlist and return its ID."
+  "Pick one item from playlist and return its ID.
+PROMPT is a string to prompt with; normally it ends in a colon and a space."
   (let (names names-ids)
     (dolist (x (vlc-playlist))
       (let-alist x
@@ -172,7 +174,7 @@ and so on."
 
 ;;;###autoload
 (defun vlc-play (id)
-  "Play playlist item ID. If ID is omitted, play last active item:"
+  "Play playlist item ID.  If ID is omitted, play last active item:."
   (interactive (list (unless current-prefix-arg
                        (vlc--playlist-completing-read "Play: "))))
   (vlc--get "/requests/status.json" :command 'pl_play :id id))
@@ -309,14 +311,14 @@ ON must be one of 'toggle, nil and non-nil."
 (defun vlc-seek (pos)
   "Seek to POS.
 
-  Allowed values are of the form:
-    [+ or -][<int><H or h>:][<int><M or m or '>:][<int><nothing or S or s or \\\">]
-    or [+ or -]<int>%
-    (value between [ ] are optional, value between < > are mandatory)
-  examples:
-    1000 -> seek to the 1000th second
-    +1H:2M -> seek 1 hour and 2 minutes forward
-    -10% -> seek 10% back."
+Allowed values are of the form:
+ [+ or -][<int><H or h>:][<int><M or m or '>:][<int><nothing or S or s or \\\">]
+ or [+ or -]<int>%
+ (value between [ ] are optional, value between < > are mandatory)
+examples:
+ 1000 -> seek to the 1000th second
+ +1H:2M -> seek 1 hour and 2 minutes forward
+ -10% -> seek 10% back."
   (interactive "sSeek to: ")
   (vlc--get "/requests/status.json" :command 'seek :val pos))
 
@@ -472,7 +474,7 @@ where and how these files are written, such as –snapshot-path."
                       subtitle-text-scale-normal
                       subtitle-text-scale-up
                       subtitle-text-scale-down)
-  "List of vlc keys.
+  "List of VLC keys.
 Extract from URL
 `https://docs.racket-lang.org/vlc/#%28part._.Keys%29', which is
 extracted from URL
