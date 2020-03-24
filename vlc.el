@@ -52,23 +52,26 @@
 option --http-port=PORT."
   :type 'integer)
 
-(defcustom vlc-password "secret"
-  "Password you set for the HTTP web interface.
-See URL `https://wiki.videolan.org/Documentation:Modules/http_intf/#Access_control'."
-  :type '(choice (string :tag "Password")
-                 (const :tag "Use auth-source" auth-source)))
-
 (define-error 'vlc-error "VLC Error" 'error)
+
+;; https://wiki.videolan.org/Documentation:Modules/http_intf/#Access_control
+(defvar vlc--password nil
+  "Password of the HTTP web interface.")
 
 (defun vlc--password ()
   "Return the HTTP web interface password."
-  (pcase vlc-password
-    ((pred stringp) vlc-password)
-    ('auth-source
-     (pcase (auth-source-pick-first-password :host "vlc")
-       ('nil (user-error "Can't find your VLC password in auth-source"))
-       (pass (setq vlc-password pass))))
-    (_ (user-error "Please set a password"))))
+  (unless vlc--password
+    (let* ((plist (car (auth-source-search :host "vlc" :user "" :create t :max 1)))
+           (save (plist-get plist :save-function))
+           (pass (plist-get plist :secret)))
+      (when (functionp save)
+        (funcall save))
+      (setq vlc--password (if (functionp pass)
+                              (funcall pass)
+                            pass))))
+  (unless vlc--password
+    (user-error "Can't know your VLC password"))
+  vlc--password)
 
 (defun vlc--url-encode-params (params)
   "URL encode PARAMS which must be a plist."
