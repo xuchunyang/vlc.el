@@ -256,9 +256,7 @@ If REVERSE is non-nil, reverse the result."
                       "Sort by: "
                       vlc--sort-keys
                       nil t)
-                     (pcase current-prefix-arg
-                       ('nil nil)
-                       (_ t))))
+                     current-prefix-arg))
   (cl-assert (member mode vlc--sort-keys))
   (vlc--get "/requests/status.json" :command 'pl_sort :id (if reverse 1 0) :val mode))
 
