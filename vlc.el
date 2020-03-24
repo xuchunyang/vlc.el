@@ -65,16 +65,10 @@ See URL `https://wiki.videolan.org/Documentation:Modules/http_intf/#Access_contr
   (pcase vlc-password
     ((pred stringp) vlc-password)
     ('auth-source
-     (pcase (vlc--auth-source-search "vlc")
+     (pcase (auth-source-pick-first-password :host "vlc")
        ('nil (user-error "Can't find your VLC password in auth-source"))
        (pass (setq vlc-password pass))))
     (_ (user-error "Please set a password"))))
-
-(defun vlc--auth-source-search (host)
-  "Return password for HOST in auth-source."
-  (when-let ((plist (car (auth-source-search :host host :max 1)))
-             (pass (funcall (plist-get plist :secret))))
-    pass))
 
 (defun vlc--url-encode-params (params)
   "URL encode PARAMS which must be a plist."
