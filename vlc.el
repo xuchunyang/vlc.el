@@ -160,6 +160,8 @@ PROMPT is a string to prompt with; normally it ends in a colon and a space."
                  (if .current (concat name "* ") name)
                  id)
                 names-ids))))
+    (unless names-ids
+      (user-error "You playlist is empty, can't pick one from it"))
     (setq names-ids (nreverse names-ids))
     (assoc-default
      (completing-read prompt (mapcar #'car names-ids) nil t)
