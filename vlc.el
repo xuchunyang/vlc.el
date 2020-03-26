@@ -521,7 +521,8 @@ KEY must be on of `vlc--keys'."
                                   "--http-password" password)
                    :connection-type 'pipe)))
     ;; XXX Check if the process is started successfully
-    (setq vlc--process process)))
+    (setq vlc--process process)
+    (setq vlc--password password)))
 
 (provide 'vlc)
 ;;; vlc.el ends here
