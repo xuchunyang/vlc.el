@@ -4,11 +4,15 @@ This package lets you control VLC through the [Web Interface](https://wiki.video
 
 ## Usage
 
-### Enable the web interface
+### Start VLC with the web interface
 
-To use this package, you're going to need to enable the web interface, go to
-Preferences → HTTP web interface → check "Enable HTTP web interface", and don't
-forget to set a non-empty password, then restart VLC.
+Go to Preferences → HTTP web interface → check "Enable HTTP web interface", and
+don't forget to set a non-empty password, then restart VLC.
+
+Another choice is simply `M-x vlc-start`, it will launch VLC for you with this
+command:
+
+    vlc --extraintf http --http-password secret
 
 ### Have fun
 

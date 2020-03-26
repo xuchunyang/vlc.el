@@ -32,6 +32,7 @@
 (require 'dom)
 (require 'json)
 (require 'subr-x)
+(require 'seq)                          ; `seq-find'
 
 (defvar url-http-end-of-headers)
 (defvar url-http-response-status)
@@ -51,6 +52,16 @@
 8080 is the default port unless you launch VLC with command line
 option --http-port=PORT."
   :type 'integer)
+
+(defcustom vlc-executable (or (seq-find
+                               #'executable-find
+                               '("/usr/local/bin/vlc"
+                                 "/Applications/VLC.app/Contents/MacOS/VLC"
+                                 "\\Program Files\\VideoLAN\\VLC\\vlc.exe"
+                                 "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe"))
+                              "vlc")
+  "The VLC executable used by `vlc-start'."
+  :type 'string)
 
 (define-error 'vlc-error "VLC Error" 'error)
 
@@ -489,6 +500,28 @@ KEY must be on of `vlc--keys'."
                        (s (intern s)))))
   (cl-assert (memq key vlc--keys))
   (vlc--get "/requests/status.json" :command 'key :val key))
+
+;;; Start
+
+(defvar vlc--process nil "The VLC process.")
+
+(defun vlc-start ()
+  "Start a VLC process."
+  (interactive)
+  (unless (executable-find vlc-executable)
+    (user-error "Can't find VLC executable"))
+  (let* ((password "secret")
+         (process-buf (generate-new-buffer " *vlc*"))
+         (process (make-process
+                   :name "vlc"
+                   :buffer process-buf
+                   :command (list vlc-executable
+                                  "--no-color"
+                                  "--extraintf" "http"
+                                  "--http-password" password)
+                   :connection-type 'pipe)))
+    ;; XXX Check if the process is started successfully
+    (setq vlc--process process)))
 
 (provide 'vlc)
 ;;; vlc.el ends here
