@@ -1,4 +1,5 @@
 # VideoLAN VLC Media Player Control
+[![Melpa](https://melpa.org/packages/vlc-badge.svg)](https://melpa.org/#/vlc)
 
 This package lets you control VLC through the [Web Interface](https://wiki.videolan.org/Control_VLC_via_a_browser/)'s [API](https://github.com/videolan/vlc/blob/fad0d14618f7be34b04347e517644764d43d8dad/share/lua/http/requests/README.txt).
 
