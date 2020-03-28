@@ -180,6 +180,7 @@ PROMPT is a string to prompt with; normally it ends in a colon and a space."
 
 ;;; Play, Pause, and Stop
 
+;;;###autoload
 (defun vlc-stop ()
   "Stop playing the current stream, if playing or paused."
   (interactive)
@@ -192,6 +193,7 @@ PROMPT is a string to prompt with; normally it ends in a colon and a space."
                        (vlc--playlist-completing-read "Play: "))))
   (vlc--get "/requests/status.json" :command 'pl_play :id id))
 
+;;;###autoload
 (defun vlc-pause ()
   "Toggle the playing pause state."
   (interactive)
@@ -210,11 +212,13 @@ PROMPT is a string to prompt with; normally it ends in a colon and a space."
            when (equal (alist-get 'name child) "Playlist")
            return (alist-get 'children child)))
 
+;;;###autoload
 (defun vlc-empty ()
   "Clear all items from the playlist."
   (interactive)
   (vlc--get "/requests/status.json" :command 'pl_empty))
 
+;;;###autoload
 (defun vlc-add (uri &optional noaudio novideo)
   "Add URI to playlist and start playback.
 NOAUDIO and NOVIDEO are optional options.
@@ -232,21 +236,25 @@ When called interactively, with prefix arg, you can pick one."
             :option (cond (noaudio "noaudio")
                           (novideo "novideo"))))
 
+;;;###autoload
 (defun vlc-enqueue (uri)
   "Add URI to playlist."
   (interactive (list (concat "file://" (expand-file-name (read-file-name "Add file: ")))))
   (vlc--get "/requests/status.json" :command 'in_enqueue :input uri))
 
+;;;###autoload
 (defun vlc-next ()
   "Start playing the next item in the playlist."
   (interactive)
   (vlc--get "/requests/status.json" :command 'pl_next))
 
+;;;###autoload
 (defun vlc-prev ()
   "Start playing the previous item in the playlist."
   (interactive)
   (vlc--get "/requests/status.json" :command 'pl_previous))
 
+;;;###autoload
 (defun vlc-delete (id)
   "Delete an item from playlist by its ID."
   (interactive (list (vlc--playlist-completing-read "Delete: ")))
@@ -264,6 +272,7 @@ When called interactively, with prefix arg, you can pick one."
                            "title numeric" "album")
   "All possible sort keys.")
 
+;;;###autoload
 (defun vlc-sort (mode &optional reverse)
   "Sort by MODE and return the result.
 MODE must be one of `vlc--sort-keys'.
@@ -278,6 +287,7 @@ If REVERSE is non-nil, reverse the result."
 
 ;;; Rate
 
+;;;###autoload
 (defun vlc-rate (rate)
   "Set playback speed to RATE.
 RATE should within [25%, 400%] according to
@@ -287,6 +297,7 @@ VLC->Playback->Playback Speed."
 
 ;;; Random / Repeat / Loop
 
+;;;###autoload
 (defun vlc-random (&optional on)
   "Set whether VLC should select streams from the playlist randomly.
 rather than in order according to ON.
@@ -299,6 +310,7 @@ If ON is non-nil, switch to random."
                      (and (alist-get 'random (vlc--get "/requests/status.json")) t))))
     (vlc--get "/requests/status.json" :command 'pl_random)))
 
+;;;###autoload
 (defun vlc-repeat (&optional on)
   "Set whether VLC should repeat playing the current stream continuously.
 ON must be one of 'toggle, nil and non-nil."
@@ -308,6 +320,7 @@ ON must be one of 'toggle, nil and non-nil."
                      (and (alist-get 'repeat (vlc--get "/requests/status.json")) t))))
     (vlc--get "/requests/status.json" :command 'pl_repeat)))
 
+;;;###autoload
 (defun vlc-loop (&optional on)
   "Set whether VLC should repeat playing the playlist continuously.
 ON must be one of 'toggle, nil and non-nil."
@@ -319,6 +332,7 @@ ON must be one of 'toggle, nil and non-nil."
 
 ;;; Absolute Position
 
+;;;###autoload
 (defun vlc-seek (pos)
   "Seek to POS.
 
@@ -343,6 +357,7 @@ examples:
 
 ;;; Video Options
 
+;;;###autoload
 (defun vlc-fullscreen (&optional on)
   "Set whether VLC should repeat playing the playlist continuously.
 ON must be one of 'toggle, nil and non-nil."
@@ -356,6 +371,7 @@ ON must be one of 'toggle, nil and non-nil."
 
 ;;; Audio Options
 
+;;;###autoload
 (defun vlc-volume (&optional val)
   "Set volume to VAL.
 VAL can be absolute integer, percent or +/- relative value, must
@@ -365,6 +381,7 @@ of the form: +<int>, -<int>, <int> or <int>%."
 
 ;;; Snapshot
 
+;;;###autoload
 (defun vlc-snapshot ()
   "Write a snapshot still image of the current video display to a file.
 See VLC documentation for command line arguments for controlling
@@ -491,6 +508,7 @@ Extract from URL
 extracted from URL
 `https://wiki.videolan.org/VLC_HowTo/Use_with_lirc/'")
 
+;;;###autoload
 (defun vlc-key (key)
   "Send a key command KEY to VLC.
 KEY must be on of `vlc--keys'."
@@ -505,6 +523,7 @@ KEY must be on of `vlc--keys'."
 
 (defvar vlc--process nil "The VLC process.")
 
+;;;###autoload
 (defun vlc-start ()
   "Start a VLC process."
   (interactive)
